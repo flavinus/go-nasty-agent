@@ -68,6 +68,8 @@ func (a *Analyser) raiseScore(amount int, message string) {
 
 func (a *Analyser) run(input chan Sample) bool {
 
+	fmt.Printf("\n<< ANALYSE")
+
 	a.score = 0
 	a.samples = 0
 	a.discussion = ""
@@ -96,6 +98,9 @@ func (a *Analyser) watchStatus(who string, i, sc, psc, dsc int) (int, int) {
 
 	if sc != psc { // state changed
 		count := i - dsc
+
+		//fmt.Printf("\n<< state changed %s : status %d  count %d ", who, sc, count)
+
 		if psc == 0 { // mute ended
 			a.raiseScore(count*5, fmt.Sprintf("%s remained muted during %.2fs", who, float64(count)*0.1))
 
@@ -150,6 +155,8 @@ func getChanStatus(volume int) int {
 	switch {
 	case volume == 0:
 		return 0
+	case volume < 0:
+		return -1
 	case volume < 10:
 		return 1
 	default:
@@ -177,7 +184,7 @@ func analyseFile(filename string) bool {
 	schan := make(chan Sample)
 	w.ToChannel(schan)
 
-	a := Analyser{debug: true}
+	a := Analyser{debug: false}
 	return a.run(schan)
 }
 
@@ -190,4 +197,5 @@ func main() {
 	for _, file := range files {
 		analyseFile(file)
 	}
+
 }
