@@ -26,9 +26,13 @@ Une conversation normale se caractérisent par un échange, c'est a dire une suc
 
 A un temps donné, on peut résumer le statut du channel en fonction du volume sonore.
 
-0:MUTE 			volume = 0
-1:SILENT 		volume < 10, configurable
-2:SPEAKING
+0 : MUTE 			volume = 0
+
+1 : SILENT 		volume < 10, configurable
+
+2 : SPEAKING
+
+-1 : used for start or end 
 
 RQ: peux etre que le bruit de fond peut etre différents en fonction des interlocuteurs et que la valeur arbitraire choisue posera problème, à voir...
 
@@ -49,16 +53,16 @@ Par exemple:
 
 A un temps donné, on peut définir le status de la conversation en combinant le status des deux channels.
 
-_: SILENT or MUTE
-c: CLIENT
-a: AGENT
-#: COLLISION
+0 : SILENT or MUTE
+1 : CLIENT
+2 : AGENT
+3 : COLLISION
 
 A leur tour ces données peuvent être étudiée, notament cela permet d'évaluer la répartition de la parole en comptant simplement les status.
 
-    __cc___aaaaaaaaaaaaaaaaa__cccccc___ccccc_cc___aaaa__a_a_aa_aaaaaa_aaaaa__aaaaaa######____####___#cccccccccccc ...
+    0011000222222222222222220011111100011111011000222200202022022222202222200222222333333000033330003111111111111 ...
 
-    __cc____ccccc___cccccccccccc_____________________________________ ...
+    00110000111110001111111111110000000000000000000000000000000000000 ...
 
 
 Une bonne discussion:
