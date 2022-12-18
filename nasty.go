@@ -11,7 +11,7 @@ import (
 )
 
 type Sample struct {
-	client, agent int8
+	client, agent int
 }
 
 // WAVE FORM
@@ -34,8 +34,8 @@ func LoadWaveform(filename string) *Waveform {
 
 type Waveform struct {
 	Description string `json:"description"`
-	ChanClient  []int8 `json:"channel0"`
-	ChanAgent   []int8 `json:"channel1"`
+	ChanClient  []int  `json:"channel0"`
+	ChanAgent   []int  `json:"channel1"`
 }
 
 func (w *Waveform) ToChannel() chan Sample {
@@ -70,13 +70,13 @@ func (a *Analyser) run(input chan Sample) float32 {
 	a.count = 0
 	a.discussion = ""
 
-	prevClientStatus, prevAgentStatus := int8(-1), int8(-1)
+	prevClientStatus, prevAgentStatus := int(-1), int(-1)
 	beginClientStatus, beginAgentStatus := 0, 0
 
 	for sample := range input {
 		clientStatus := getChanStatus(sample.client)
 		agentStatus := getChanStatus(sample.agent)
-		a.discussion = a.discussion + getDiscussionStatus(clientStatus, agentStatus)
+		a.discussion = a.discussion + fmt.Sprint(getDiscussionStatus(clientStatus, agentStatus))
 
 		prevClientStatus, beginClientStatus = a.watchStatus("Client", clientStatus, prevClientStatus, beginClientStatus)
 		prevAgentStatus, beginAgentStatus = a.watchStatus("Agent", agentStatus, prevAgentStatus, beginAgentStatus)
@@ -88,7 +88,7 @@ func (a *Analyser) run(input chan Sample) float32 {
 
 }
 
-func (a *Analyser) watchStatus(who string, status int8, previousStatus int8, beginStatus int) (int8, int) {
+func (a *Analyser) watchStatus(who string, status int, previousStatus int, beginStatus int) (int, int) {
 	if status != previousStatus { // state changed
 		if previousStatus == 0 { // mute ended
 			a.eventMuteEnd(who, status, beginStatus)
@@ -98,7 +98,7 @@ func (a *Analyser) watchStatus(who string, status int8, previousStatus int8, beg
 	return previousStatus, beginStatus
 }
 
-func (a *Analyser) eventMuteEnd(who string, state int8, beginStatus int) {
+func (a *Analyser) eventMuteEnd(who string, state int, beginStatus int) {
 
 	count := a.count - beginStatus
 	a.raiseScore(count*5, fmt.Sprintf("%s remained muted during %.2fs", who, float32(count)*0.1))
@@ -145,7 +145,7 @@ func (a *Analyser) results() float32 {
 
 // OTHER FUNCS
 
-func getChanStatus(volume int8) int8 {
+func getChanStatus(volume int) int {
 	switch {
 	case volume == 0:
 		return 0
@@ -158,16 +158,16 @@ func getChanStatus(volume int8) int8 {
 	}
 }
 
-func getDiscussionStatus(clientStatus, agentStatus int8) string {
+func getDiscussionStatus(clientStatus, agentStatus int) int {
 	switch {
 	case clientStatus > 1 && agentStatus > 1:
-		return "3"
+		return 3
 	case clientStatus > 1:
-		return "1"
+		return 1
 	case agentStatus > 1:
-		return "2"
+		return 2
 	default:
-		return "0"
+		return 0
 	}
 }
 
