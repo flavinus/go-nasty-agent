@@ -1,0 +1,5 @@
+{
+    "description": "mini sample",
+    "channel0": [0, 5, 50, 5, 0],
+    "channel1":  [50, 50, 50, 5, 0]
+}

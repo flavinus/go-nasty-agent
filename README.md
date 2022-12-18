@@ -54,8 +54,11 @@ Par exemple:
 A un temps donné, on peut définir le status de la conversation en combinant le status des deux channels.
 
 0 : SILENT or MUTE
+
 1 : CLIENT
+
 2 : AGENT
+
 3 : COLLISION
 
 A leur tour ces données peuvent être étudiée, notament cela permet d'évaluer la répartition de la parole en comptant simplement les status.

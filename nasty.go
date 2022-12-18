@@ -33,9 +33,8 @@ func LoadWaveform(filename string) *Waveform {
 }
 
 type Waveform struct {
-	Description string `json:"description"`
-	ChanClient  []int  `json:"channel0"`
-	ChanAgent   []int  `json:"channel1"`
+	ChanClient []int `json:"channel0"`
+	ChanAgent  []int `json:"channel1"`
 }
 
 func (w *Waveform) ToChannel() chan Sample {

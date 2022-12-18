@@ -21,3 +21,13 @@ func TestGetDiscussionStatus(t *testing.T) {
 	assert.Equal(t, 2, getDiscussionStatus(0, 2))
 	assert.Equal(t, 3, getDiscussionStatus(2, 2))
 }
+
+func TestLoadWaveform(t *testing.T) {
+	assert.Equal(t,
+		&Waveform{
+			ChanClient: []int{0, 5, 50, 5, 0},
+			ChanAgent:  []int{50, 50, 50, 5, 0},
+		},
+		LoadWaveform("samples/data_mini.json"),
+	)
+}
